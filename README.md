@@ -1,2 +1,2 @@
-# algodata
-Algorithms and data structures
+# algodata-structures
+ Algorithms and data structures

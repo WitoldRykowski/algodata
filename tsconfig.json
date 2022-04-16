@@ -1,0 +1,10 @@
+{
+  "compilerOptions": {     /* Enable incremental compilation */
+    "target": "es5",
+    "strict": true,
+    "moduleResolution": "node",
+    "esModuleInterop": true,
+    "forceConsistentCasingInFileNames": true
+  },
+  "include": ["src/**/*"]
+}
