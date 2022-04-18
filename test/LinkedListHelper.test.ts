@@ -1,9 +1,11 @@
 import LinkedListHelper from "../src/DataStructures/LinkedList/LinkedListHelper";
-import LinkedList from "../src/DataStructures/LinkedList/LinkedList";
+import { dataStructures } from "../src";
 import ListNode from "../src/DataStructures/LinkedList/ListNode";
 
+const { LinkedList } = dataStructures
+
 describe("LinkedListHelper", () => {
-  let dummyList: LinkedList<number>
+  let dummyList
 
   beforeEach(() => {
     dummyList = new LinkedList([1,2,3])

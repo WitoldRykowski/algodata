@@ -1,4 +1,4 @@
-import quickSort from "../src/Algorithms/QuickSort";
+import { quickSort } from "../src/Algorithms/QuickSort";
 
 describe("QuickSort", () => {
   let array: number[]

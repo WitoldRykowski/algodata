@@ -1,21 +1,26 @@
-import LinkedList from "../src/DataStructures/LinkedList/LinkedList";
+import { LinkedList } from '../src/DataStructures/LinkedList/LinkedList'
 import ListNode from "../src/DataStructures/LinkedList/ListNode";
 
 describe("LinkedList", () => {
-  let list: LinkedList<number>
+  let count = 1
+  let list
+
   beforeEach(() => {
-    list = new LinkedList([1,2,3,4])
+    if (count <= 5) {
+      list = new LinkedList();
+      count++
+    }
+    else list = new LinkedList([1,2,3,4])
   })
 
   test('should create empty list', () => {
-    list = new LinkedList()
     expect(list).toBeInstanceOf(LinkedList)
     expect(list.head).toBeNull()
     expect(list.length).toBe(0)
+    expect(list.isDoubly).toBe(false)
   })
 
   test('should return empty array because linked list is empty', () => {
-    list = new LinkedList()
     list.reverse()
 
     expect(list.toArray).toEqual([])
@@ -23,7 +28,6 @@ describe("LinkedList", () => {
   })
 
   test('should try to remove first element from empty list and get error', () => {
-    list = new LinkedList()
     try {
       list.removeFirst()
     } catch (error: any) {
@@ -32,7 +36,6 @@ describe("LinkedList", () => {
   })
 
   test('should try to remove last element from empty list and get error', () => {
-    list = new LinkedList()
     try {
       list.removeLast()
     } catch (error: any) {
@@ -41,7 +44,6 @@ describe("LinkedList", () => {
   })
 
   test('should try to remove element with value from empty list', () => {
-    list = new LinkedList()
     try {
       list.removeByValue(2)
     } catch (error: any) {
@@ -195,13 +197,6 @@ describe("LinkedList", () => {
     expect(list.length).toBe(2)
   })
 
-  test('should remove node with cycle', () => {
-    list.insertAtEnd(list.head?.next || null)
-    list.removeByValue(2)
-    expect(list.toArray).toEqual([1,3,4])
-    expect(list.length).toBe(3)
-  })
-
   test('should remove by value', () => {
     list.removeByValue(3)
     expect(list.toArray).toEqual([1,2,4])
@@ -216,58 +211,6 @@ describe("LinkedList", () => {
     expect(list.length).toBe(0)
   })
 
-  test('should not detect cycle in list and return null', () => {
-    expect(list.isCycled).toBe(false)
-    expect(list.cycleAtNode).toBeNull()
-  })
-
-  test('should detect cycle in list and return node', () => {
-    list.insertAtEnd(list.head)
-    const node = list.cycleAtNode
-
-    expect(list.isCycled).toBe(true)
-    expect(list.tail !== node).toBe(true)
-    expect(node).toBeInstanceOf(ListNode)
-    expect(node?.value).toBe(1)
-  })
-
-  test('should try to insert node at end of cycled list and get error', () => {
-    list.insertAtEnd(list.head)
-    try {
-      list.insertAtEnd(1)
-    } catch (error: any) {
-      expect(error.message).toBe('Can not insert node and end of cycled list')
-    }
-  })
-
-  test('should return array of values from cycled list', () => {
-    list.insertAtEnd(list.head)
-    expect(list.toArray).toEqual([1,2,3,4])
-    expect(list.length).toBe(Infinity)
-  })
-
-  test('should remove first element from cycled list', () => {
-    list.insertAtEnd(list.head)
-    list.removeFirst()
-
-    expect(list.toArray).toEqual([2,3,4])
-    expect(list.isCycled).toBe(false)
-    expect(list.length).toBe(3)
-  })
-
-  test('should insert element after 3 into cycled list', () => {
-    list.insertAfter(list.head,3)
-
-    expect(list.length).toBe(Infinity)
-    expect(list.isCycled).toBe(true)
-    expect(list.toArray).toEqual([1,2,3])
-
-    list.removeFirst()
-    expect(list.toArray).toEqual([2,3])
-    expect(list.tail?.value).toBe(3)
-    expect(list.length).toBe(2)
-  })
-
   test('should insert after tail', () => {
     list.insertAfter(4,5)
 
@@ -275,8 +218,35 @@ describe("LinkedList", () => {
     expect(list.length).toBe(5)
   })
 
+  test('should sort not cycled linked list', () => {
+    list = new LinkedList([7,5,2,1,9,4,0,3,10])
+    list.sort()
+
+    expect(list.toArray).toEqual([
+      0,1,2,3,4,5,7,9,10
+    ])
+  })
+
+  test('should throw error "Can not sort circular linked list"', () => {
+    if (list.head) list.insertAtEnd(list.head)
+
+    try {
+      list.sort()
+    } catch (error: any) {
+      expect(error.message).toBe('Can not sort cycled linked list')
+    }
+  })
+});
+
+
+describe("Cycled LinkedList", () => {
+  let list
+  beforeEach(() => {
+    list = new LinkedList([1,2,3,4])
+  })
+
   test('should insert cycle before 4', () => {
-    list.insertBefore(list.head?.next || null, 4)
+    if (list.head?.next) list.insertBefore(list.head.next, 4)
 
     expect(list.length).toBe(Infinity)
     expect(list.toArray).toEqual([1,2,3])
@@ -290,20 +260,69 @@ describe("LinkedList", () => {
     expect(list.tail?.value).toBe(2) //1
   })
 
-  test('should insert at begin into null head', () => {
-    const list = new LinkedList([1])
+  test('should not detect cycle in list and return null', () => {
+    expect(list.isCycled).toBe(false)
+    expect(list.cycleAtNode).toBeNull()
+  })
 
-    expect(list.head).toEqual({ value: 1, next: null })
-    list.insertAtBegin(null)
-    expect(list.length).toBe(1)
-    expect(list.toArray).toEqual([1])
-    expect(list.head).toEqual({ value: 1, next: null })
+  test('should detect cycle in list and return node', () => {
+    if (list.head) list.insertAtEnd(list.head)
+    const node = list.cycleAtNode
+
+    expect(list.isCycled).toBe(true)
+    expect(list.tail !== node).toBe(true)
+    expect(node).toBeInstanceOf(ListNode)
+    expect(node?.value).toBe(1)
+  })
+
+  test('should try to insert node at end of cycled list and get error', () => {
+    if (list.head) list.insertAtEnd(list.head)
+    try {
+      list.insertAtEnd(1)
+    } catch (error: any) {
+      expect(error.message).toBe('Can not insert node and end of cycled list')
+    }
+  })
+
+  test('should return array of values from cycled list', () => {
+    if (list.head) list.insertAtEnd(list.head)
+    expect(list.toArray).toEqual([1,2,3,4])
+    expect(list.length).toBe(Infinity)
+  })
+
+  test('should remove first element from cycled list', () => {
+    if (list.head) list.insertAtEnd(list.head)
+    list.removeFirst()
+
+    expect(list.toArray).toEqual([2,3,4])
+    expect(list.isCycled).toBe(false)
+    expect(list.length).toBe(3)
+  })
+
+  test('should insert element after 3 into cycled list', () => {
+    if (list.head) list.insertAfter(list.head,3)
+
+    expect(list.length).toBe(Infinity)
+    expect(list.isCycled).toBe(true)
+    expect(list.toArray).toEqual([1,2,3])
+
+    list.removeFirst()
+    expect(list.toArray).toEqual([2,3])
+    expect(list.tail?.value).toBe(3)
+    expect(list.length).toBe(2)
+  })
+
+  test('should remove node with cycle', () => {
+    if (list.head?.next) list.insertAtEnd(list.head.next)
+    list.removeByValue(2)
+    expect(list.toArray).toEqual([1,3,4])
+    expect(list.length).toBe(3)
   })
 
   test('should get error trying reverse cycled list', () => {
     list.insertAtEnd(5)
     list.insertAtEnd(6)
-    list.insertAtEnd(list.head?.next?.next || null)
+    if (list.head?.next?.next) list.insertAtEnd(list.head.next.next)
 
     expect(list.isCycled).toBe(true)
 
@@ -313,24 +332,72 @@ describe("LinkedList", () => {
       expect(error.message).toBe('Can not reverse cycled list')
     }
   })
-
-  test('should sort not cycled linked list', () => {
-    list = new LinkedList([7,5,2,1,9,4,0,3,10])
-    list.sort()
-
-    expect(list.toArray).toEqual([
-      0,1,2,3,4,5,7,9,10
-    ])
-  })
-
-  test('should throw error "Can not sort circular linked list"', () => {
-    list.insertAtEnd(list.head)
-
-    try {
-      list.sort()
-    } catch (error: any) {
-      expect(error.message).toBe('Can not sort circular linked list')
-    }
-  })
 });
 
+describe("Doubly LinkedList", () => {
+  let list
+  beforeEach(() => {
+    list = new LinkedList([1,2,3,4], true)
+  })
+
+  test("should create doubly linked list", () => {
+    expect(list.isDoubly).toBe(true)
+    expect(list.length).toBe(4)
+    expect(list.toArray).toEqual([1,2,3,4])
+    expect(list.head?.value).toBe(1)
+    expect(list.head?.next?.value).toBe(2)
+    expect(list.head?.previous).toBeNull()
+  });
+
+  test("should create doubly linked list", () => {
+    const anotherList = new LinkedList(list.head, true)
+
+    expect(anotherList.isDoubly).toBe(true)
+    expect(anotherList.length).toBe(4)
+    expect(anotherList.toArray).toEqual([1,2,3,4])
+    expect(anotherList.head?.previous).toBeNull()
+  });
+
+  test("should insert value at begin", () => {
+    list.insertAtBegin(0)
+    expect(list.toArray).toEqual([0,1,2,3,4])
+    expect(list.head.previous).toBeNull()
+    expect(list.head.next.previous).toEqual(list.head)
+  });
+
+  test("should insert value after 2", () => {
+    list.insertAfter(0,1)
+    expect(list.toArray).toEqual([1,0,2,3,4])
+    expect(list.head.next.previous).toEqual(list.head)
+    expect(list.head.next.next.previous).toEqual(list.head.next)
+  });
+
+  test("should insert value before 2", () => {
+    list.insertBefore(0,2)
+    expect(list.toArray).toEqual([1,0,2,3,4])
+    expect(list.head.next.previous).toEqual(list.head)
+    expect(list.head.next.next.previous).toEqual(list.head.next)
+  });
+
+  test("should remove first node", () => {
+    list.removeFirst()
+    expect(list.toArray).toEqual([2,3,4])
+    expect(list.head.previous).toBeNull()
+    expect(list.length).toBe(3)
+  });
+
+  test("should remove by value", () => {
+    list.removeByValue(2)
+    expect(list.toArray).toEqual([1,3,4])
+    expect(list.length).toBe(3)
+    expect(list.head.next.previous).toEqual(list.head)
+  });
+
+  test("should reverse list", () => {
+    list.reverse()
+    expect(list.toArray).toEqual([4,3,2,1])
+    expect(list.tail).toBeDefined()
+    expect(list.head.previous).toBeNull()
+    expect(list.head.next.previous).toEqual(list.head)
+  });
+});

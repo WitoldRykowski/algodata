@@ -1,7 +1,7 @@
-import Stack from "../src/DataStructures/Stack/Stack";
+import { Stack } from "../src/DataStructures/Stack/Stack";
 
 describe("Stack", () => {
-  let stack: Stack<number>
+  let stack
 
   beforeEach(() => {
     stack = new Stack([1, 2, 3])

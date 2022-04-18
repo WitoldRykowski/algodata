@@ -1,4 +1,4 @@
-export default class Stack<T> {
+export class Stack<T> {
   constructor(private values: T[] = []) {}
 
   get length(): number {

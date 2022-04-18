@@ -10,7 +10,7 @@ function partition<T>(array: T[], left: number, right: number) {
     while (array[j] > pivot) j--
 
     if (i <= j) {
-      ;[array[i], array[j]] = [array[j], array[i]]
+      [array[i], array[j]] = [array[j], array[i]]
       i++
       j--
     }
@@ -18,7 +18,7 @@ function partition<T>(array: T[], left: number, right: number) {
   return i
 }
 
-export default function quickSort<T>(
+export function quickSort<T>(
   array: T[],
   left = 0,
   right: number = array.length - 1

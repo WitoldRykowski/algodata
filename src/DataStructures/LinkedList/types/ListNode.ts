@@ -1,5 +1,7 @@
-import ListNode from '../ListNode'
-
-declare type Node<T> = ListNode<T> | null
+type Node = {
+  value: number,
+  next: Node,
+  previous?: Node
+} | null
 
 export default Node

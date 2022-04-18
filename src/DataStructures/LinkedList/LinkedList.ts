@@ -1,28 +1,34 @@
 import Node from './types/ListNode'
 import ListNode from './ListNode'
 import LinkedListHelper from './LinkedListHelper'
-import quickSort from '../../Algorithms/QuickSort'
+import { quickSort } from '../../Algorithms/QuickSort'
 
-export default class LinkedList<T> {
-  private header: Node<T> = null
-  private last: Node<T> = null
+export class LinkedList {
+  private header: Node = null
+  private last: Node = null
   private currentLength = 0
+  private doubly = false
   private readonly helper = LinkedListHelper.prototype
 
-  constructor(values: T[] | Node<T> = []) {
+  constructor(values: number[] | Node = [], double = false) {
+    this.doubly = double
     if (Array.isArray(values)) this.generateFromArray(values)
     else this.provideList(values)
   }
 
-  get tail(): Node<T> {
+  get tail(): Node {
     return this.last
   }
 
-  get toArray(): T[] {
+  get isDoubly(): boolean {
+    return this.doubly
+  }
+
+  get toArray(): number[] {
     return this.helper.convertToArray(this.header)
   }
 
-  get head(): Node<T> {
+  get head(): Node {
     return this.header
   }
 
@@ -31,7 +37,7 @@ export default class LinkedList<T> {
     return this.currentLength
   }
 
-  get cycleAtNode(): Node<T> {
+  get cycleAtNode(): Node {
     return this.helper.detectCycle(this.header)
   }
 
@@ -39,9 +45,10 @@ export default class LinkedList<T> {
     return !!this.cycleAtNode
   }
 
-  insertAtEnd(element: T | Node<T>): void {
+  insertAtEnd(element: number | ListNode): void {
     if (this.isCycled) throw Error('Can not insert node and end of cycled list')
     const node = this.helper.getNode(element)
+    if (node && this.isDoubly) node.previous = this.last
 
     if (!this.last) {
       this.last = this.header = node
@@ -50,23 +57,24 @@ export default class LinkedList<T> {
       this.last.next = node
 
       if (!this.isCycled) {
-        this.last = this.last.next
+        this.last = node
         this.currentLength++
       }
     }
   }
 
-  insertAtBegin(element: T | Node<T>): void {
-    if (element === null || element === undefined) return
+  insertAtBegin(element: number | ListNode): void {
     const temp = this.header
     this.header = this.helper.getNode(element)
-    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-    // @ts-ignore
+    if (this.isDoubly) {
+      this.header.previous = null;
+      temp.previous = this.header
+    }
     this.header.next = temp
     this.currentLength++
   }
 
-  insertAfter(element: T | Node<T>, value: T): void {
+  insertAfter(element: number | ListNode, value: number): void {
     if (this.tail && this.tail.value === element) {
       return this.insertAtEnd(value)
     }
@@ -77,12 +85,7 @@ export default class LinkedList<T> {
     while (current) {
       count++
       if (current.value === value) {
-        current.next = this.helper.getNode(element, current.next)
-        if (this.isCycled) {
-          this.currentLength = count
-          this.last = current
-        } else this.currentLength++
-        return
+        return this.insertByValue(element, current, count)
       }
       current = current.next
     }
@@ -90,7 +93,7 @@ export default class LinkedList<T> {
     throw Error('Provided value does not exist in list')
   }
 
-  insertBefore(element: T | Node<T>, value: T): void {
+  insertBefore(element: number | ListNode, value: number): void {
     if (this.header && this.header.value === value) {
       return this.insertAtBegin(element)
     }
@@ -101,12 +104,7 @@ export default class LinkedList<T> {
     while (current) {
       count++
       if (current.next?.value === value) {
-        current.next = this.helper.getNode(element, current.next)
-        if (this.isCycled) {
-          this.currentLength = count
-          this.last = current
-        } else this.currentLength++
-        return
+        return this.insertByValue(element, current, count)
       }
       current = current.next
     }
@@ -114,7 +112,7 @@ export default class LinkedList<T> {
     throw Error('Provided value does not exist in list')
   }
 
-  removeFirst(): T {
+  removeFirst(): number {
     if (!this.header) throw Error('List is empty')
 
     const cycleAtNode = this.cycleAtNode
@@ -124,12 +122,14 @@ export default class LinkedList<T> {
 
     const value = this.header.value
     this.header = this.header.next
+    if (this.isDoubly) this.header.previous = null
+
     this.currentLength--
 
     return value
   }
 
-  removeLast(): T {
+  removeLast(): number {
     if (!this.header) throw Error('List is empty')
     if (this.isCycled) {
       this.helper.removeCycle(this.cycleAtNode, this.head)
@@ -154,7 +154,7 @@ export default class LinkedList<T> {
     return current.value
   }
 
-  removeByValue(value: T): T {
+  removeByValue(value: number): number {
     if (!this.header) throw Error('List is empty')
     if (this.tail && this.tail.value === value) return this.removeLast()
     if (this.header.value === value) return this.removeFirst()
@@ -169,6 +169,7 @@ export default class LinkedList<T> {
 
     while (current) {
       if (current.value === value) {
+        if (this.isDoubly) current.next.previous = previous
         previous.next = current.next
         this.currentLength--
         return value
@@ -181,37 +182,52 @@ export default class LinkedList<T> {
     throw Error('Provided value does not exist in list')
   }
 
-  reverse(): Node<T> {
+  reverse(): Node {
     if (this.isCycled) throw Error('Can not reverse cycled list')
+    if (this.isDoubly) return this.header = this.helper.reverseDoubly(this.header)
     if (this.header) this.last = new ListNode(this.header.value)
-    return (this.header = this.helper.reverse(this.header))
+    return this.header = this.helper.reverse(this.header)
   }
 
   sort(): void {
-    if (this.isCycled) throw Error('Can not sort circular linked list')
-    this.generateFromArray(quickSort(this.toArray))
+    if (this.isCycled) throw Error('Can not sort cycled linked list')
+    const values = this.toArray
+    this.clear()
+    this.generateFromArray(quickSort(values))
   }
 
   clear(): void {
     this.header = null
     this.last = null
-    this.currentLength = 0
+    this.currentLength = 0;
+    this.doubly = false
   }
 
-  private generateFromArray(array: T[]): void {
-    this.clear()
+  private generateFromArray(array: number[]): void {
     for (let i = 0; i < array.length; i++) {
       this.insertAtEnd(array[i])
     }
   }
 
-  private provideList(list: Node<T>): void {
-    this.clear()
+  private provideList(list: Node): void {
     let current = list
 
     while (current) {
       this.insertAtEnd(current.value)
       current = current.next
     }
+  }
+
+  private insertByValue(element: number | ListNode, current: ListNode, count: number) {
+    current.next = this.helper.getNode(element, current.next)
+    if (this.isDoubly) {
+      current.next.previous = current
+      current.next.next.previous = current.next
+    }
+
+    if (this.isCycled) {
+      this.currentLength = count
+      this.last = current
+    } else this.currentLength++
   }
 }

@@ -1,10 +1,10 @@
 import Node from './types/ListNode'
 
-export default class ListNode<T> {
+export default class ListNode {
   value
   next
 
-  constructor(value: T, next: Node<T> = null) {
+  constructor(value: number, next: Node = null) {
     this.value = value
     this.next = next
   }

@@ -1,7 +1,7 @@
-import Queue from "../src/DataStructures/Queue/Queue";
+import { Queue } from '../src/DataStructures/Queue/Queue'
 
 describe("Queue", () => {
-  let queue: Queue<number>
+  let queue
 
   beforeEach(() => {
     queue = new Queue([1,2,3])
