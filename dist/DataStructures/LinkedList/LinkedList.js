@@ -5,6 +5,18 @@ const LinkedListHelper_1 = require("./LinkedListHelper");
 const QuickSort_1 = require("../../Algorithms/QuickSort");
 class LinkedList {
     constructor(values = [], double = false) {
+        /**
+         * Returns the average of two numbers.
+         *
+         * @remarks
+         * This method is part of the nothing.
+         *
+         * @param x - The first input number
+         * @param y - The second input number
+         * @returns The arithmetic mean of `x` and `y`
+         *
+         * @beta
+         */
         this.header = null;
         this.last = null;
         this.currentLength = 0;
