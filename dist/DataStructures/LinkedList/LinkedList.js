@@ -1,7 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.LinkedList = void 0;
-const ListNode_1 = require("./ListNode");
 const LinkedListHelper_1 = require("./LinkedListHelper");
 const QuickSort_1 = require("../../Algorithms/QuickSort");
 class LinkedList {
@@ -165,10 +164,15 @@ class LinkedList {
         if (this.isCycled)
             throw Error('Can not reverse cycled list');
         if (this.isDoubly)
-            return this.header = this.helper.reverseDoubly(this.header);
-        if (this.header)
-            this.last = new ListNode_1.default(this.header.value);
-        return this.header = this.helper.reverse(this.header);
+            this.header = this.helper.reverseDoubly(this.header);
+        else {
+            this.header = this.helper.reverse(this.header);
+            let current = this.header;
+            while (current && current.next) {
+                current = current.next;
+            }
+            this.last = current;
+        }
     }
     sort() {
         if (this.isCycled)

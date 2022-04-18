@@ -145,11 +145,14 @@ describe("LinkedList", () => {
     expect(list.length).toBe(5)
   })
 
-  test('should reverse list', () => {
+  test('should reverse list and insert 7 at the end', () => {
     list.reverse()
 
     expect(list.toArray).toEqual([4,3,2,1])
     expect(list.tail).toEqual({ value: 1, next: null })
+
+    list.insertAtEnd(7)
+    expect(list.toArray).toEqual([4,3,2,1,7])
   })
 
   test('should remove first element and return it', () => {
@@ -399,5 +402,22 @@ describe("Doubly LinkedList", () => {
     expect(list.tail).toBeDefined()
     expect(list.head.previous).toBeNull()
     expect(list.head.next.previous).toEqual(list.head)
+  });
+
+  test("should sort list", () => {
+    list = new LinkedList([5,2,3,1,4,0], true)
+    list.sort()
+
+    expect(list.toArray).toEqual([0,1,2,3,4,5])
+  });
+
+  test("should be cycled list", () => {
+    list.insertAtEnd(list.head)
+    expect(list.isCycled).toBe(true)
+    expect(list.length).toBe(Infinity)
+
+    list.removeLast()
+    expect(list.isCycled).toBe(false)
+    expect(list.length).toBe(3)
   });
 });

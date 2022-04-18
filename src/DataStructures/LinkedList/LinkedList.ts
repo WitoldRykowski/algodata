@@ -182,11 +182,18 @@ export class LinkedList {
     throw Error('Provided value does not exist in list')
   }
 
-  reverse(): Node {
+  reverse(): void {
     if (this.isCycled) throw Error('Can not reverse cycled list')
-    if (this.isDoubly) return this.header = this.helper.reverseDoubly(this.header)
-    if (this.header) this.last = new ListNode(this.header.value)
-    return this.header = this.helper.reverse(this.header)
+    if (this.isDoubly) this.header = this.helper.reverseDoubly(this.header)
+    else {
+      this.header = this.helper.reverse(this.header);
+
+      let current = this.header
+      while (current && current.next) {
+        current = current.next
+      }
+      this.last = current
+    }
   }
 
   sort(): void {

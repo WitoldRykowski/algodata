@@ -21,7 +21,7 @@ export declare class LinkedList {
     removeFirst(): number;
     removeLast(): number;
     removeByValue(value: number): number;
-    reverse(): Node;
+    reverse(): void;
     sort(): void;
     clear(): void;
     private generateFromArray;
