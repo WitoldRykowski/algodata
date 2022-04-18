@@ -4,19 +4,6 @@ import LinkedListHelper from './LinkedListHelper'
 import { quickSort } from '../../Algorithms/QuickSort'
 
 export class LinkedList {
-  /**
-   * Returns the average of two numbers.
-   *
-   * @remarks
-   * This method is part of the nothing.
-   *
-   * @param x - The first input number
-   * @param y - The second input number
-   * @returns The arithmetic mean of `x` and `y`
-   *
-   * @beta
-   */
-
   private header: Node = null
   private last: Node = null
   private currentLength = 0
@@ -199,13 +186,9 @@ export class LinkedList {
     if (this.isCycled) throw Error('Can not reverse cycled list')
     if (this.isDoubly) this.header = this.helper.reverseDoubly(this.header)
     else {
+      const tailValue = this.header?.value
       this.header = this.helper.reverse(this.header);
-
-      let current = this.header
-      while (current && current.next) {
-        current = current.next
-      }
-      this.last = current
+      this.last = this.findNode(tailValue)
     }
   }
 
@@ -214,6 +197,18 @@ export class LinkedList {
     const values = this.toArray
     this.clear()
     this.generateFromArray(quickSort(values))
+  }
+
+  findNode(value: number): ListNode {
+    let current = this.header
+
+    while (current) {
+      if (current.value === value) return current
+
+      current = current.next
+    }
+
+    return null
   }
 
   clear(): void {

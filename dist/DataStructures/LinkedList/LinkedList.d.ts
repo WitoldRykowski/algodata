@@ -1,18 +1,6 @@
 import Node from './types/ListNode';
 import ListNode from './ListNode';
 export declare class LinkedList {
-    /**
-     * Returns the average of two numbers.
-     *
-     * @remarks
-     * This method is part of the nothing.
-     *
-     * @param x - The first input number
-     * @param y - The second input number
-     * @returns The arithmetic mean of `x` and `y`
-     *
-     * @beta
-     */
     private header;
     private last;
     private currentLength;
@@ -35,6 +23,7 @@ export declare class LinkedList {
     removeByValue(value: number): number;
     reverse(): void;
     sort(): void;
+    findNode(value: number): ListNode;
     clear(): void;
     private generateFromArray;
     private provideList;

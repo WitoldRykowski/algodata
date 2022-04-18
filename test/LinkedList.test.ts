@@ -28,27 +28,19 @@ describe("LinkedList", () => {
   })
 
   test('should try to remove first element from empty list and get error', () => {
-    try {
-      list.removeFirst()
-    } catch (error: any) {
-      expect(error.message).toBe('List is empty')
-    }
+    expect(() => list.removeFirst()).toThrow(
+      new Error('List is empty')
+    )
   })
 
   test('should try to remove last element from empty list and get error', () => {
-    try {
-      list.removeLast()
-    } catch (error: any) {
-      expect(error.message).toBe('List is empty')
-    }
+    expect(() => list.removeLast()).toThrow(new Error('List is empty'))
   })
 
   test('should try to remove element with value from empty list', () => {
-    try {
-      list.removeByValue(2)
-    } catch (error: any) {
-      expect(error.message).toBe('List is empty')
-    }
+    expect(() => list.removeByValue(2)).toThrow(
+      new Error('List is empty')
+    )
   })
 
   test('should generate linked list from provided list', () => {
@@ -94,27 +86,9 @@ describe("LinkedList", () => {
   })
 
   test('should try to insert element after value which not exist', () => {
-    try {
-      list.insertAfter(3, 5)
-    } catch (error: any) {
-      expect(error.message).toBe('Provided value does not exist in list')
-    }
-  })
-
-  test('should try to insert element after value which not exist', () => {
-    try {
-      list.insertAfter(3, 5)
-    } catch (error: any) {
-      expect(error.message).toBe('Provided value does not exist in list')
-    }
-  })
-
-  test('should try to insert element after value which not exist', () => {
-    try {
-      list.insertAfter(3, 5)
-    } catch (error: any) {
-      expect(error.message).toBe('Provided value does not exist in list')
-    }
+    expect(() => list.insertAfter(3, 5)).toThrow(
+      new Error('Provided value does not exist in list')
+    )
   })
 
   test('should insert 3 after 1', () => {
@@ -125,11 +99,9 @@ describe("LinkedList", () => {
   })
 
   test('should try to insert element before value which not exist', () => {
-    try {
-      list.insertBefore(4, 5)
-    } catch (error: any) {
-      expect(error.message).toBe('Provided value does not exist in list')
-    }
+    expect(() => list.insertBefore(4, 5)).toThrow(
+      new Error('Provided value does not exist in list')
+    )
   })
 
   test('should insert 4 before 1', () => {
@@ -183,11 +155,8 @@ describe("LinkedList", () => {
   })
 
   test('should try to remove element with not existing value and get error', () => {
-    try {
-      list.removeByValue(9)
-    } catch (error: any) {
-      expect(error.message).toBe('Provided value does not exist in list')
-    }
+    expect(() => list.removeByValue(9))
+      .toThrow(new Error('Provided value does not exist in list'))
   })
 
   test('should remove first and last element', () => {
@@ -233,11 +202,15 @@ describe("LinkedList", () => {
   test('should throw error "Can not sort circular linked list"', () => {
     if (list.head) list.insertAtEnd(list.head)
 
-    try {
-      list.sort()
-    } catch (error: any) {
-      expect(error.message).toBe('Can not sort cycled linked list')
-    }
+    expect(() => list.sort()).toThrow(new Error('Can not sort cycled linked list'))
+  })
+
+  test("should find node with value equal 3", () => {
+    expect(list.findNode(3)).toEqual({ value: 3, next: { value: 4, next: null }})
+  });
+
+  test('should try to find node with non existing value and get error', () => {
+    expect(list.findNode(9)).toBeNull()
   })
 });
 
@@ -280,11 +253,8 @@ describe("Cycled LinkedList", () => {
 
   test('should try to insert node at end of cycled list and get error', () => {
     if (list.head) list.insertAtEnd(list.head)
-    try {
-      list.insertAtEnd(1)
-    } catch (error: any) {
-      expect(error.message).toBe('Can not insert node and end of cycled list')
-    }
+    expect(() => list.insertAtEnd(1))
+      .toThrow(new Error('Can not insert node and end of cycled list'))
   })
 
   test('should return array of values from cycled list', () => {
@@ -328,12 +298,9 @@ describe("Cycled LinkedList", () => {
     if (list.head?.next?.next) list.insertAtEnd(list.head.next.next)
 
     expect(list.isCycled).toBe(true)
-
-    try {
-      list.reverse()
-    } catch (error: any) {
-      expect(error.message).toBe('Can not reverse cycled list')
-    }
+    expect(() => list.reverse()).toThrow(
+      new Error('Can not reverse cycled list')
+    )
   })
 });
 

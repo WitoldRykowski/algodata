@@ -5,18 +5,6 @@ const LinkedListHelper_1 = require("./LinkedListHelper");
 const QuickSort_1 = require("../../Algorithms/QuickSort");
 class LinkedList {
     constructor(values = [], double = false) {
-        /**
-         * Returns the average of two numbers.
-         *
-         * @remarks
-         * This method is part of the nothing.
-         *
-         * @param x - The first input number
-         * @param y - The second input number
-         * @returns The arithmetic mean of `x` and `y`
-         *
-         * @beta
-         */
         this.header = null;
         this.last = null;
         this.currentLength = 0;
@@ -173,17 +161,15 @@ class LinkedList {
         throw Error('Provided value does not exist in list');
     }
     reverse() {
+        var _a;
         if (this.isCycled)
             throw Error('Can not reverse cycled list');
         if (this.isDoubly)
             this.header = this.helper.reverseDoubly(this.header);
         else {
+            const tailValue = (_a = this.header) === null || _a === void 0 ? void 0 : _a.value;
             this.header = this.helper.reverse(this.header);
-            let current = this.header;
-            while (current && current.next) {
-                current = current.next;
-            }
-            this.last = current;
+            this.last = this.findNode(tailValue);
         }
     }
     sort() {
@@ -192,6 +178,15 @@ class LinkedList {
         const values = this.toArray;
         this.clear();
         this.generateFromArray((0, QuickSort_1.quickSort)(values));
+    }
+    findNode(value) {
+        let current = this.header;
+        while (current) {
+            if (current.value === value)
+                return current;
+            current = current.next;
+        }
+        return null;
     }
     clear() {
         this.header = null;
