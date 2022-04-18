@@ -8,8 +8,6 @@ In progress...
 bug report: https://github.com/WitoldRykowski/algodata/issues
 github: https://github.com/WitoldRykowski/algodata
 
-** Version 1.0.2 **
-
 ---
 
 ## Linked List
