@@ -1,4 +1,4 @@
-import { Queue } from "../Queue";
+import { Queue } from "../src/DataStructures/Queue/Queue";
 
 describe("Queue", () => {
   let queue;

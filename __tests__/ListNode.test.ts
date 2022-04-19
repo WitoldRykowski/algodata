@@ -1,4 +1,4 @@
-import ListNode from "../ListNode";
+import ListNode from "../src/DataStructures/LinkedList/ListNode";
 
 describe("ListNode", () => {
   test("should create list node with value 1 and next null", () => {

@@ -1,4 +1,4 @@
-import Node from "../Node";
+import Node from "../src/DataStructures/BinaryTree/Node";
 
 describe("Node.ts", () => {
   test("should create binary tree node", () => {

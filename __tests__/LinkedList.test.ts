@@ -1,5 +1,5 @@
-import { LinkedList } from "../LinkedList";
-import ListNode from "../ListNode";
+import { LinkedList } from "../src/DataStructures/LinkedList/LinkedList";
+import ListNode from "../src/DataStructures/LinkedList/ListNode";
 
 describe("LinkedList", () => {
   let count = 1;

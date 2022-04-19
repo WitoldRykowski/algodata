@@ -1,6 +1,6 @@
-import LinkedListHelper from "../LinkedListHelper";
-import { dataStructures } from "../../../index";
-import ListNode from "../ListNode";
+import LinkedListHelper from "../src/DataStructures/LinkedList/LinkedListHelper";
+import { dataStructures } from "../src";
+import ListNode from "../src/DataStructures/LinkedList/ListNode";
 
 const { LinkedList } = dataStructures;
 

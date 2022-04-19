@@ -1,4 +1,4 @@
-import { BinaryTree } from "../BinaryTree";
+import { BinaryTree } from "../src/DataStructures/BinaryTree/BinaryTree";
 
 describe("BinaryTree.ts", () => {
   let tree: BinaryTree;

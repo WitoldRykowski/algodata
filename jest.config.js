@@ -12,9 +12,9 @@ module.exports = {
       tsconfig: "tsconfig.json",
     },
   },
-  errorOnDeprecated: true,
-  bail: 1,
-  verbose: true,
+  // errorOnDeprecated: true,
+  // bail: 1,
+  // verbose: true,
   collectCoverage: true,
   coverageThreshold: {
     global: {
