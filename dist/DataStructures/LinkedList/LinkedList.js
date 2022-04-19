@@ -2,9 +2,9 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.LinkedList = void 0;
 const LinkedListHelper_1 = require("./LinkedListHelper");
-const QuickSort_1 = require("../../Algorithms/QuickSort");
+const QuickSort_1 = require("../../Algorithms/QuickSort/QuickSort");
 class LinkedList {
-    constructor(values = [], double = false) {
+    constructor(values = [], double = !Array.isArray(values) && values.previous !== undefined) {
         this.header = null;
         this.last = null;
         this.currentLength = 0;
@@ -41,7 +41,7 @@ class LinkedList {
     }
     insertAtEnd(element) {
         if (this.isCycled)
-            throw Error('Can not insert node and end of cycled list');
+            throw Error("Can not insert node and end of cycled list");
         const node = this.helper.getNode(element);
         if (node && this.isDoubly)
             node.previous = this.last;
@@ -80,7 +80,7 @@ class LinkedList {
             }
             current = current.next;
         }
-        throw Error('Provided value does not exist in list');
+        throw Error("Provided value does not exist in list");
     }
     insertBefore(element, value) {
         var _a;
@@ -96,11 +96,11 @@ class LinkedList {
             }
             current = current.next;
         }
-        throw Error('Provided value does not exist in list');
+        throw Error("Provided value does not exist in list");
     }
     removeFirst() {
         if (!this.header)
-            throw Error('List is empty');
+            throw Error("List is empty");
         const cycleAtNode = this.cycleAtNode;
         if (cycleAtNode === this.head) {
             this.helper.removeCycle(cycleAtNode, this.head);
@@ -114,7 +114,7 @@ class LinkedList {
     }
     removeLast() {
         if (!this.header)
-            throw Error('List is empty');
+            throw Error("List is empty");
         if (this.isCycled) {
             this.helper.removeCycle(this.cycleAtNode, this.head);
         }
@@ -136,7 +136,7 @@ class LinkedList {
     }
     removeByValue(value) {
         if (!this.header)
-            throw Error('List is empty');
+            throw Error("List is empty");
         if (this.tail && this.tail.value === value)
             return this.removeLast();
         if (this.header.value === value)
@@ -158,12 +158,12 @@ class LinkedList {
             previous = current;
             current = current.next;
         }
-        throw Error('Provided value does not exist in list');
+        throw Error("Provided value does not exist in list");
     }
     reverse() {
         var _a;
         if (this.isCycled)
-            throw Error('Can not reverse cycled list');
+            throw Error("Can not reverse cycled list");
         if (this.isDoubly)
             this.header = this.helper.reverseDoubly(this.header);
         else {
@@ -174,7 +174,7 @@ class LinkedList {
     }
     sort() {
         if (this.isCycled)
-            throw Error('Can not sort cycled linked list');
+            throw Error("Can not sort cycled linked list");
         const values = this.toArray;
         this.clear();
         this.generateFromArray((0, QuickSort_1.quickSort)(values));

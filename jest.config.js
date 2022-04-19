@@ -1,17 +1,20 @@
 module.exports = {
-  roots: ['<rootDir>/test'],
+  roots: ["<rootDir>"],
   testMatch: [
-    '**/__tests__/**/*.+(ts|tsx|js)',
-    '**/?(*.)+(spec|test).+(ts|tsx|js)',
+    "**/__tests__/**/*.+(ts|tsx|js)",
+    "**/?(*.)+(spec|test).+(ts|tsx|js)",
   ],
   transform: {
-    '^.+\\.(ts|tsx)$': 'ts-jest',
+    "^.+\\.(ts|tsx)$": "ts-jest",
   },
   globals: {
-    'ts-jest': {
-      tsconfig: 'tsconfig.json',
+    "ts-jest": {
+      tsconfig: "tsconfig.json",
     },
   },
+  errorOnDeprecated: true,
+  bail: 1,
+  verbose: true,
   collectCoverage: true,
   coverageThreshold: {
     global: {
@@ -20,5 +23,5 @@ module.exports = {
       lines: 95,
     },
   },
-  coverageReporters: ['html', 'text-summary'],
-}
+  coverageReporters: ["html", "text-summary"],
+};

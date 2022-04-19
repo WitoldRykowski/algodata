@@ -14,7 +14,7 @@
     "algorithms",
     "data-structures"
   ],
-  "author": "",
+  "author": "Witold Rykowski",
   "license": "ISC",
   "dependencies": {
     "typescript": "^4.6.3"

@@ -1,5 +1,5 @@
-import Node from './types/ListNode';
-import ListNode from './ListNode';
+import Node from "./types/ListNode";
+import ListNode from "./ListNode";
 export declare class LinkedList {
     private header;
     private last;
